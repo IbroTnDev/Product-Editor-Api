@@ -1,0 +1,12 @@
+# Routes
+
+GET  /  controllers.HomeController.index
+GET  /ping  controllers.HomeController.ping
+GET  /products  controllers.ProductController.listProducts
+GET  /productsList  controllers.ProductController.listProds
+GET  /products/:id  controllers.ProductController.getProduct(id: Int)
+GET  /products/search/:term  controllers.ProductController.getProductByTerm(term: String)
+POST  /products  controllers.ProductController.createProductDescription
+PUT  /products/:id  controllers.ProductController.updateProduct(id: Int)
+DELETE  /products/:id  controllers.ProductController.deleteProduct(id: Int)
+
