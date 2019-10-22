@@ -3,7 +3,7 @@ package repositories
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future}
 import slick.jdbc.PostgresProfile.api._
-import models.{Product, Description, ProductsInfo, DescriptionDTO, ProductDTO}
+import models.{Product, Description, ProductsInfo}
 
 class ProductRepository {
   private val Products = TableQuery[ProductsTable]
@@ -63,14 +63,14 @@ class ProductRepository {
     //    def list: Future[Seq[Product]] = db.run(Products.sortBy(id).result)
 
 
-    def createProductDescription(product: ProductDTO, description: DescriptionDTO) = {
+    def createProductDescription(product: Product, description: Description) = {
         db.run(Products += Product.fromDTO(product)).map { _ =>
             ()
         }
         createDescription(description);
     }
 
-    def createDescription(description: DescriptionDTO) = {
+    def createDescription(description: Description) = {
         db.run(ProductDescriptions += Description.fromDTO(description)).map { _ =>
             ()
         }
@@ -101,7 +101,7 @@ class ProductRepository {
 
 
 
-    def update(id: Int, product: ProductDTO) = {
+    def update(id: Int, product: Product) = {
       db.run(
         Products.filter(i => i.id === id).update(Product.fromDTO(product))
       )

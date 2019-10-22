@@ -14,22 +14,11 @@ case class Description(
 object Description {
   implicit val format: Format[Description] = Json.format[Description]
 
-  def fromDTO(dto: DescriptionDTO): Description =
+  def fromDTO(dto: Description): Description =
     new Description(
       dto.key,
       dto.value,
       dto.description_id,
       dto.id
     )
-}
-
-case class DescriptionDTO(
-    key: String,
-    value: String,
-    description_id: Option[Int],
-    id: Int
-)
-
-object DescriptionDTO {
-  implicit val format: Format[DescriptionDTO] = Json.format[DescriptionDTO]
 }

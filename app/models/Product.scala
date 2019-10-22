@@ -14,7 +14,7 @@ case class Product(
 object Product {
   implicit val format: Format[Product] = Json.format[Product]
 
-  def fromDTO(dto: ProductDTO): Product =
+  def fromDTO(dto: Product): Product =
     new Product(
       dto.id,
       dto.name,
@@ -22,16 +22,4 @@ object Product {
       dto.code,
       dto.price
     )
-}
-
-case class ProductDTO(
-    id: Int,
-    name: String,
-    category: String,
-    code: Int,
-    price: Double,
-)
-
-object ProductDTO {
-  implicit val format: Format[ProductDTO] = Json.format[ProductDTO]
 }

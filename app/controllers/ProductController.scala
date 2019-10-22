@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import play.api.libs.json.Json
 import scala.concurrent.{Future, ExecutionContext}
-import models.{Product, Description, ProductsInfo, DescriptionDTO, ProductDTO}
+import models.{Product, Description, ProductsInfo}
 import repositories.ProductRepository
 
 class ProductController @Inject()(
@@ -27,7 +27,7 @@ class ProductController @Inject()(
 
   def createProductDescription = Action.async(parse.json) { request => {
     request.body
-      .validate[(ProductDTO, DescriptionDTO)]
+      .validate[(Product, Description)]
       .map { case (product, description) => 
         ProductRepo
           .createProductDescription(product, description)
@@ -77,7 +77,7 @@ class ProductController @Inject()(
 
   def updateProduct(id: Int) = Action.async(parse.json) { request => 
     request.body
-      .validate[ProductDTO]
+      .validate[Product]
       .map { product =>
         ProductRepo
           .update(id, product)
