@@ -21,7 +21,7 @@ class ProductController @Inject()(
 
   def listProds = Action.async { _ =>
     ProductRepo.listprod.map { products =>
-      Ok(Json.toJson(products))
+      Ok(Json.toJson(products)) 
     }
   }
 
@@ -65,7 +65,7 @@ class ProductController @Inject()(
 
   def getProduct(id: Int) = Action.async { _ =>
     ProductRepo.getSingleProduct(id).map { result =>
-      Ok(Json.toJson(result))
+      Future.successful(Ok(Json.toJson(result)))
     }
   }
 

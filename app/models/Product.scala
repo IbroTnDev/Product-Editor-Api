@@ -11,9 +11,11 @@ case class Product(
     price: Double
 )
 
+// This is the companion object of the class user
 object Product {
-  implicit val format: Format[Product] = Json.format[Product]
+  implicit val format: Format[Product]  = Json.format[Product]
 
+  // Factory method : used to create an instance of a particular class
   def fromDTO(dto: Product): Product =
     new Product(
       dto.id,
@@ -21,5 +23,5 @@ object Product {
       dto.category,
       dto.code,
       dto.price
-    )
+    ) 
 }
