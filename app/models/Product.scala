@@ -11,7 +11,7 @@ case class Product(
     price: Double
 )
 
-// This is the companion object of the class user
+// This is the companion object of the class Product
 object Product {
   implicit val format: Format[Product]  = Json.format[Product]
 

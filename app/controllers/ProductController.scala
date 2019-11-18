@@ -117,7 +117,7 @@ class ProductController @Inject()(
       )
   }
 
-  def deleteProduct(id: Int) = Action.async { request =>
+  def deleteProduct(id: Int) = Action.async { _ =>
     ProductRepo
       .delete(id)
       .map { result =>

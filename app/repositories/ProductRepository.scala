@@ -34,27 +34,35 @@ class ProductRepository {
     def list: Future[Seq[ProductsInfo]] = {
         val q = Products
         .joinLeft(ProductDescriptions).on(_.id === _.description_id)
+          .sortBy(_._1.id)
     
-        val sortedQuery = q.sortBy(_._1.id)
+        //val sortedQuery = q.sortBy(_._1.id)
 
-        db.run(sortedQuery.result).map { results =>
+        db.run(q.result).map { results =>
         results.groupBy(_._1).map {
-          case (product, description) => ProductsInfo(product.flatMap(_2), description.flatMap(_._2))
+          case (product, prodDesc) => ProductsInfo(product, prodDesc.flatMap(_._2))
         }.toSeq
         }
     
     }
     
-    def listprod: Future[Seq[Product]] = db.run(Products.result)
+    def listprod: Future[Seq[Product]] = db.run(Products.result).map{
+      products => products
+    }
     //    def list: Future[Seq[Product]] = db.run(Products.sortBy(id).result)
 
 
     def createProductDescription(product: Product, description: Description) = {
+//       // getting id of last element in table
+//        var id = 0
+//        Products.sortBy(_.id.desc).take(1).map { row =>
+//          id = row  + 1
+
         db.run(Products += Product.fromDTO(product)).map { _ =>
             ()
         }
         createDescription(description);
-    } 
+    }
 
     def createDescription(description: Description) = {
         db.run(ProductDescriptions += Description.fromDTO(description)).map { _ =>
@@ -65,17 +73,16 @@ class ProductRepository {
     def getSingleProduct(id: Int): Future[Seq[ProductsInfo]] = {
         val q = Products.filter(_.id === id)
         .joinLeft(ProductDescriptions).on(_.id === _.description_id)
-    
-        val sortedQuery = q.sortBy(_._1.id)
+          .sortBy(_._1.id)
 
-        db.run(sortedQuery.result).map { results =>
-        results.map {
-          case (prod, grp) => ProductsInfo(prod, grp.flatMap(_._2))
+        db.run(q.result).map { results =>
+        results.groupBy(_._1).map {
+          case (prod, grp) => ProductsInfo(prod, grp.flatMap {_._2})
         }.toSeq
         }
     }
 
-    def getProductByT(term: String): Future[Product] = {
+    def getProductByT(term: String) = {
         val query = for {
         product <- Products if product.name like s"%$term%" 
         } yield (product.name, product.id)
@@ -89,14 +96,18 @@ class ProductRepository {
     def update(id: Int, product: Product) = {
       db.run(
         Products.filter(_.id === id).update(Product.fromDTO(product))
-      )
+      ).map{_ =>
+        ()
+      }
     }
   
     def delete(id: Int) = {
         val q = Products.filter(_.id === id)
-        .joinLeft(ProductDescriptions).on(_.id === _.description_id)
+       // .joinLeft(ProductDescriptions).on(_.id === _.description_id)
 
-        db.run(q.result).delete
+        db.run(Products.filter(_.id === id).delete).map{_ =>
+          ()
+        }
     }
   
 }
