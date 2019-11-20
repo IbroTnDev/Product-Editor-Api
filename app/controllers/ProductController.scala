@@ -75,23 +75,21 @@ class ProductController @Inject()(
     }
   }
 
-  def updateProduct(id: Int) = Action.async(parse.json) { request => 
+  def updateProduct(id: Int) = Action.async(parse.json) { request =>
     request.body
       .validate[Product]
       .map { product =>
         ProductRepo
           .update(id, product)
-          .map { result =>
-            result match {
-              case 0 =>
-                NotFound(
-                  Json.obj(
-                    "status" -> "failed",
-                    "error" -> "Not Found"
-                  )
+          .map {
+            case e =>
+              NotFound(
+                Json.obj(
+                  "status" -> "failed",
+                  "error" -> "Not Found"
                 )
-              case _ => Ok(Json.obj("status" -> "success"))
-            }
+              )
+            case _ => Ok(Json.obj("status" -> "success"))
           }
           .recoverWith {
             case e =>
@@ -120,17 +118,15 @@ class ProductController @Inject()(
   def deleteProduct(id: Int) = Action.async { _ =>
     ProductRepo
       .delete(id)
-      .map { result =>
-        result match {
-          case 0 =>
-            NotFound(
-              Json.obj(
-                "status" -> "failed",
-                "error" -> "Not Found"
-              )
+      .map {
+        case e =>
+          NotFound(
+            Json.obj(
+              "status" -> "failed",
+              "error" -> "Not Found"
             )
-          case _ => Ok(Json.obj("status" -> "success"))
-        }
+          )
+        case _ => Ok(Json.obj("status" -> "success"))
       }
       .recoverWith {
         case e =>

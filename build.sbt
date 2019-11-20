@@ -14,6 +14,8 @@ libraryDependencies += "com.typesafe.slick" %% "slick" % "3.3.2"
 libraryDependencies += "org.slf4j" % "slf4j-nop" % "1.6.4"
 libraryDependencies += "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2"
 libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.13"
+//libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
+//libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
 
 
 // Adds additional packages into Twirl
